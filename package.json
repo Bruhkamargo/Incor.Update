@@ -1,8 +1,9 @@
 {
-  "name": "backend-template",
+  "name": "backend-incor-update",
   "version": "1.0.0",
-  "description": "Template de Back End",
+  "description": "BackEnd da pagina de estilo de vida ",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node index.js"
