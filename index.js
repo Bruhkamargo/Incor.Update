@@ -1,3 +1,4 @@
+const cors = require("cors");
 import express, { json } from 'express';
 const app = express();
 
@@ -7,6 +8,8 @@ const app = express();
 const port = process.env.PORT || 3001;
 
 app.use(json());
+app.use(cors());
+
 
 const Teste = 'Funcionando'
 
@@ -21,7 +24,7 @@ app.get('/', (req, res) => {
  * Retorna o Teste
  */
 app.get('/teste', (req, res) => {
-    return res.json('Teste Ok!');
+    return res.json(Teste);
 })
 
 
