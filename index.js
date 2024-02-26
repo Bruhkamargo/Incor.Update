@@ -20,8 +20,8 @@ app.get('/', (req, res) => {
 /**
  * Retorna o Teste
  */
-app.get('/Teste', (req, res) => {
-    return res.json({ Return: Teste }); 
+app.get('/teste', (req, res) => {
+    return res.json('Teste Ok!');
 })
 
 
