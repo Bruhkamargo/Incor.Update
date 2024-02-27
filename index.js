@@ -1,6 +1,7 @@
-const cors = require("cors");
+import cors from "cors";
 import express, { json } from 'express';
 const app = express();
+
 
 /**define como porta 3001 que eu devo apontar como url= http://localhost:3001/ nos testes
  * ou utiliza a porta que avercel me oferece
@@ -26,6 +27,7 @@ app.get('/', (req, res) => {
 app.get('/teste', (req, res) => {
     return res.json(Teste);
 })
+
 
 
 app.listen(port, () => {
