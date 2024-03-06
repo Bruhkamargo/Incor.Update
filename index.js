@@ -4,6 +4,7 @@ import { sql } from "@vercel/postgres";
 import { v4 as uuidv4 } from 'uuid';
 const app = express();
 
+import { LoginOnFirebase } from "./ApiFire.js";
 
 /**define como porta 3001 que eu devo apontar como url= http://localhost:3001/ nos testes
  * ou utiliza a porta que avercel me oferece
@@ -15,12 +16,21 @@ app.use(cors());
 
 const Teste = 'Funcionando';
 const users = [];
+const assessments = {
+    Total: 0,
+    PhysicalActivity: 0,
+    Nutrition: 0,
+    Addictions: 0,
+    Sleep: 0,
+    Stress: 0,
+    Relationships: 0
+}
 
 import pkg from 'pg';
 const { Pool } = pkg;
 
 const pool = new Pool({
-  connectionString: "postgres://default:F3qEORZUDAx9@ep-lucky-bonus-a61t175b-pooler.us-west-2.aws.neon.tech:5432/verceldb?sslmode=require",
+    connectionString: "postgres://default:F3qEORZUDAx9@ep-lucky-bonus-a61t175b-pooler.us-west-2.aws.neon.tech:5432/verceldb?sslmode=require",
 });
 
 
@@ -80,6 +90,46 @@ app.post('/setusers', (req, res) => {
     return res.json(NewUser);
 })
 
+/**
+ * Login no FireBase
+ */
+app.post('/authenticate', async (req, res) => {
+    try {
+        const { Email, Senha } = req.body;
+        console.log({ Email, Senha });
+        LoginOnFirebase(Email, Senha).then((user) => {
+            return res.json({ success: true, msg: "Login!" });
+        }).catch((error) => {
+            console.error("Falha na autenticação:", error);
+            return res.json({ success: false, msg: "Falha na autenticação!" });
+        })
+    } catch (error) {
+        return res.status(500).json({ success: false, error: error.message });
+    }
+});
+
+
+/**
+ * Retorna as "Avaliações"
+ */
+app.get('/assessments', (req, res) => {
+    console.log(assessments);
+    return res.json(assessments);
+})
+
+/* Adiciona */
+app.post('/setassessments', (req, res) => {
+    const { Total, PhysicalActivity, Nutrition, Addictions, Sleep, Stress, Relationships } = req.body;
+    assessments.Total += Total
+    assessments.PhysicalActivity += PhysicalActivity
+    assessments.Nutrition += Nutrition
+    assessments.Addictions += Addictions
+    assessments.Sleep += Sleep
+    assessments.Stress += Stress
+    assessments.Relationships += Relationships
+
+    return res.json({ success: true });
+})
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
